@@ -1,10 +1,10 @@
-#include "厌倦_Apihook.h"
+#include "yj_Apihook.h"
 
 void 厌倦_Apihook::setHook(int adders, LPVOID fun)
 {
 	if (adders==0)
 	{
-		MessageBoxA(0, "HOOK地址不能为0","txt", 0);
+		MessageBoxA(0, "HOOK地址不能为0","-.-", 0);
 		return;
 	}
 	厌倦_Apihook::l_adder = adders;

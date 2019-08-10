@@ -148,11 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="厌倦_Apihook.cpp" />
-    <ClCompile Include="源.cpp" />
+    <ClCompile Include="yj_Apihook.cpp" />
+    <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="厌倦_Apihook.h" />
+    <ClInclude Include="yj_Apihook.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

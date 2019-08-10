@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="源.cpp">
+    <ClCompile Include="yj_Apihook.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="厌倦_Apihook.cpp">
+    <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="厌倦_Apihook.h">
+    <ClInclude Include="yj_Apihook.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
