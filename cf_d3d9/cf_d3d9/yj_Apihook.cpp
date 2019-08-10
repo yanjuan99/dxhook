@@ -1,4 +1,4 @@
-#include "Ñá¾ë_Apihook.h"
+#include "yj_Apihook.h"
 
 void Ñá¾ë_Apihook::setHook(int adders, LPVOID fun)
 {
