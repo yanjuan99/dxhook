@@ -23,12 +23,12 @@ HRESULT WINAPI NewD3DXCreateFontA(LPDIRECT3DDEVICE9       pDevice,
 	LPCSTR                  pFaceName,
 	LPD3DXFONT*             ppFont);
 
-厌倦_Apihook hook_D3DXCreateFontA("d3dx9_29.dll", "D3DXCreateFontA", NewD3DXCreateFontA);
-厌倦_Apihook hook_DrawIndexedPrimitive;
+Apihook hook_D3DXCreateFontA("d3dx9_29.dll", "D3DXCreateFontA", NewD3DXCreateFontA);
+Apihook hook_DrawIndexedPrimitive;
 
 LPDIRECT3DDEVICE9 s_pDxdevice;
 
-bool HOOK判断 = false;
+
 
 HRESULT WINAPI NewDrawIndexedPrimitive(LPDIRECT3DDEVICE9 pDxdevice, D3DPRIMITIVETYPE Type, INT BaseVertexIndex, UINT MinVertexIndex, UINT NumVertices, UINT startIndex, UINT primCount)
 {
@@ -62,7 +62,7 @@ HRESULT WINAPI NewDrawIndexedPrimitive(LPDIRECT3DDEVICE9 pDxdevice, D3DPRIMITIVE
 
 		pDxdevice->SetRenderState(D3DRS_LIGHTING, D3DZB_FALSE);//光照[禁用]
 
-															   //	pDxdevice->SetRenderState(D3DRS_ALPHABLENDENABLE, D3DZB_FALSE);//关闭阿尔法混合技术
+  //	pDxdevice->SetRenderState(D3DRS_ALPHABLENDENABLE, D3DZB_FALSE);//关闭阿尔法混合技术
 
 		pDxdevice->SetRenderState(D3DRS_ZFUNC, D3DZB_TRUE);//更新深度缓冲区[永远不覆盖]
 
@@ -99,14 +99,14 @@ HRESULT WINAPI NewD3DXCreateFontA(LPDIRECT3DDEVICE9       pDevice,
 	LPCSTR                  pFaceName,
 	LPD3DXFONT*             ppFont)
 {
-
-	if (HOOK判断 == false)
+	bool static hook=false;
+	if (!hook)
 	{
 		s_pDxdevice = pDevice;
 		int	DrawIndexedPrimitive_adder = *(int*)(*(int*)s_pDxdevice + 328);
 		hook_DrawIndexedPrimitive.setHook(DrawIndexedPrimitive_adder, NewDrawIndexedPrimitive);
 		hook_DrawIndexedPrimitive.Hook();
-		HOOK判断 = true;
+		hook = true;
 	}
 	hook_D3DXCreateFontA.unHook();
 	return D3DXCreateFontA(pDevice, Height, Width, Weight, MipLevels, Italic, CharSet, OutputPrecision, Quality, PitchAndFamily, pFaceName, ppFont);

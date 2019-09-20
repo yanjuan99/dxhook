@@ -1,76 +1,71 @@
 #include "yj_Apihook.h"
 
-void Ñá¾ë_Apihook::setHook(int adders, LPVOID fun)
+void Apihook::setHook(int adders, LPVOID fun)
 {
-	Ñá¾ë_Apihook::l_adder = adders;
-	Ñá¾ë_Apihook::l_funadder = Ñá¾ë_Apihook::getFunRealAddr(fun);
+	l_adder = adders;
+	l_funadder = getFunRealAddr(fun);
 	for (int i = 0; i < 5; i++)
 	{
-		Ñá¾ë_Apihook::l_funbyte[i] = *(byte*)(adders + i);
+		 l_funbyte[i] = *(byte*)(adders + i);
 	}
 }
 
-Ñá¾ë_Apihook::Ñá¾ë_Apihook() {  }
+Apihook::Apihook() {  }
 
-Ñá¾ë_Apihook::Ñá¾ë_Apihook(char lpModuleName[], char lpProcName[], LPVOID fun)
+Apihook::Apihook(const char* lpModuleName, const char* lpProcName, LPVOID fun)
 {
-	char* z_lpModuleName = lpModuleName;
-	char* z_lpProcName = lpProcName;
-	HMODULE  module = GetModuleHandleA(z_lpModuleName);
-	if (module == 0)
+	HMODULE  module = GetModuleHandleA(lpModuleName);
+	if (!module)
 	{
-		module = LoadLibraryA(z_lpModuleName);
+		module = LoadLibraryA(lpModuleName);
 	}
-	int adder = (int)GetProcAddress(module, z_lpProcName);
-	if (adder == 0)
+	int adder = (int)GetProcAddress(module, lpProcName);
+	if (!adder)
 	{
-		Ñá¾ë_Apihook::err =0;
+		 err =0;
 	}
-	Ñá¾ë_Apihook::l_adder = adder;
-	Ñá¾ë_Apihook::l_funadder = Ñá¾ë_Apihook::getFunRealAddr(fun);
+	 l_adder = adder;
+	 l_funadder =  getFunRealAddr(fun);
 
 	for (int i = 0; i < 5; i++)
 	{
-		Ñá¾ë_Apihook::l_funbyte[i] = *(byte*)(adder + i);
+		l_funbyte[i] = *(byte*)(adder + i);
 	}
 
-	Ñá¾ë_Apihook::err= 1;
+	 err= 1;
 }
-Ñá¾ë_Apihook::~Ñá¾ë_Apihook()
+Apihook::~Apihook()
 {
-	Ñá¾ë_Apihook::l_adder = 0;
-	Ñá¾ë_Apihook::l_funadder = 0;
+	l_adder = 0;
+	l_funadder = 0;
 }
 
-void Ñá¾ë_Apihook::Hook()
-{
-	DWORD shuxin;
-	VirtualProtect((LPVOID)Ñá¾ë_Apihook::l_adder, 5, 64, &shuxin);
-
-	*(byte*)Ñá¾ë_Apihook::l_adder = 0xe9;
-	*(int*)(Ñá¾ë_Apihook::l_adder + 1) = (int)Ñá¾ë_Apihook::l_funadder - Ñá¾ë_Apihook::l_adder - 5;
-
-	VirtualProtect((LPVOID)Ñá¾ë_Apihook::l_adder, 5, shuxin, 0);
-}
-
-void Ñá¾ë_Apihook::unHook()
+void Apihook::Hook()
 {
 	DWORD shuxin;
-	VirtualProtect((LPVOID)Ñá¾ë_Apihook::l_adder, 5, 64, &shuxin);
+	VirtualProtect((LPVOID)l_adder, 5, 64, &shuxin);
+
+	*(byte*)l_adder = 0xe9;
+	*(int*)(l_adder + 1) = (int)l_funadder - l_adder - 5;
+
+	VirtualProtect((LPVOID)l_adder, 5, shuxin, 0);
+}
+
+void Apihook::unHook()
+{
+	DWORD shuxin;
+	VirtualProtect((LPVOID)l_adder, 5, 64, &shuxin);
 	for (size_t i = 0; i < 5; i++)
 	{
-		*(byte*)(Ñá¾ë_Apihook::l_adder + i) = Ñá¾ë_Apihook::l_funbyte[i];
+		*(byte*)(l_adder + i) = l_funbyte[i];
 	}
 
-	VirtualProtect((LPVOID)Ñá¾ë_Apihook::l_adder, 5, shuxin, 0);
+	VirtualProtect((LPVOID)l_adder, 5, shuxin, 0);
 }
 
-bool Ñá¾ë_Apihook::if_hook(char lpModuleName[], char lpProcName[])
+bool Apihook::if_hook(const char* lpModuleName, const char* lpProcName)
 {
-	char* z_lpModuleName = lpModuleName;
-	char* z_lpProcName = lpProcName;
-
-	int text = (int)GetProcAddress(GetModuleHandleA(z_lpModuleName), z_lpProcName);
+	int text = (int)GetProcAddress(GetModuleHandleA(lpModuleName), lpProcName);
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -85,7 +80,7 @@ bool Ñá¾ë_Apihook::if_hook(char lpModuleName[], char lpProcName[])
 	}
 }
 
-unsigned int Ñá¾ë_Apihook::getFunRealAddr(LPVOID fun)
+unsigned int Apihook::getFunRealAddr(LPVOID fun)
 {
 	unsigned int realaddr = (unsigned int)fun;
 
@@ -98,7 +93,7 @@ unsigned int Ñá¾ë_Apihook::getFunRealAddr(LPVOID fun)
 	return realaddr;
 }
 
-int Ñá¾ë_Apihook::get_Err()
+int Apihook::get_Err()
 {
-	return Ñá¾ë_Apihook::err;
+	return err;
 }

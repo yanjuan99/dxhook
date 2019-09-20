@@ -30,8 +30,8 @@ ID3D11ShaderResourceView* ShaderResourceView;
 
 int 最大 = 0,最小=0;
 
-厌倦_Apihook dx11_hook;
-厌倦_Apihook dx11_hookoCreateQuery;
+Apihook dx11_hook;
+Apihook dx11_hookoCreateQuery;
 //ID3D11DeviceContext *  dx11driver;
 
 void dPrintf(LPCSTR lpformat, ...)
